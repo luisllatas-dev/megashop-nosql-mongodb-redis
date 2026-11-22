@@ -1,0 +1,47 @@
+ECHO "============================================================================"
+ECHO "   FASE 3: OPERACIONES FUNCIONALES Y MANIPULACION EN MEMORIA EN REDIS"
+ECHO "============================================================================"
+
+ECHO "--- [1] STRINGS Y EXPIRACION ATOMICA (SET / GET / TTL) ---"
+ECHO "Generando codigo PIN/OTP para entrega de PED-0006 con TTL de 1800 seg (30 min):"
+SET pedido:otp:PED-0006 "8452" EX 1800
+GET pedido:otp:PED-0006
+TTL pedido:otp:PED-0006
+
+ECHO "Consultando codigo OTP activo de PED-0001 y su tiempo restante (TTL):"
+GET pedido:otp:PED-0001
+TTL pedido:otp:PED-0001
+
+ECHO "--- [2] LECTURA EN TIEMPO REAL DE HASHES (HGETALL / HMGET / HGET) ---"
+ECHO "2.a Tracking completo en vivo del pedido PED-0001 (HGETALL):"
+HGETALL pedido:tracking:PED-0001
+
+ECHO "2.b Consulta puntual de estado, ubicacion GPS, ETA y repartidor (HMGET):"
+HMGET pedido:tracking:PED-0001 estado ubicacion_actual eta_minutos repartidor_id
+
+ECHO "2.c Datos criticos en cache del cliente CLI-0001 (HGETALL y HGET):"
+HGETALL cliente:critico:CLI-0001
+HGET cliente:critico:CLI-0001 direccion_principal
+
+ECHO "--- [3] ACTUALIZACION DE HASHES EN MEMORIA Y GESTION DE TTL (HSET / EXPIRE / HINCRBY) ---"
+ECHO "3.a Actualizando PED-0006 de EN_PREPARACION a EN_CAMINO y renovando TTL a 12h (43200s):"
+HSET pedido:tracking:PED-0006 estado "EN_CAMINO" ubicacion_actual "-12.0892,-77.0654" eta_minutos "14" ultima_actualizacion "2026-11-20T18:30:00Z"
+EXPIRE pedido:tracking:PED-0006 43200
+HGETALL pedido:tracking:PED-0006
+TTL pedido:tracking:PED-0006
+
+ECHO "3.b Descontando atomicamente 3 minutos al ETA de PED-0001 con HINCRBY:"
+HINCRBY pedido:tracking:PED-0001 eta_minutos -3
+HGET pedido:tracking:PED-0001 eta_minutos
+
+ECHO "--- [4] ELIMINACION Y LIBERACION DE MEMORIA RAM (DEL / EXISTS) ---"
+ECHO "4.a Creando y eliminando sesion temporal de prueba CLI-9999:"
+SET sesion:temporal:CLI-9999 "TOKEN_ACTIVO_XYZ" EX 300
+GET sesion:temporal:CLI-9999
+DEL sesion:temporal:CLI-9999
+EXISTS sesion:temporal:CLI-9999
+
+ECHO "4.b Eliminando OTP de PED-0006 tras confirmar la entrega y verificando DBSIZE (30):"
+DEL pedido:otp:PED-0006
+EXISTS pedido:otp:PED-0006
+DBSIZE

@@ -1,0 +1,31 @@
+# ============================================================================
+# DOCKER COMPOSE - INFRAESTRUCTURA NOSQL MEGASHOP (MONGODB 7.0 + REDIS STACK)
+# Uso para levantar ambos motores: docker compose up -d
+# ============================================================================
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: megashop_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./scripts:/scripts
+      - mongodb_data:/data/db
+
+  redis:
+    image: redis/redis-stack:latest
+    container_name: megashop_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    volumes:
+      - ./config/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./scripts:/scripts
+      - redis_data:/data
+
+volumes:
+  mongodb_data:
+  redis_data:

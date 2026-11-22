@@ -1,0 +1,89 @@
+ECHO "=== INICIANDO CARGA DE 30 REGISTROS EN MEMORIA RAM (REDIS - MEGASHOP) ==="
+FLUSHDB
+
+ECHO "--- 1. Cargando 15 Hashes de Tracking de Pedidos en Vivo (TTL: 86400s / 24h) ---"
+HSET pedido:tracking:PED-0001 pedido_id "PED-0001" cliente_id "CLI-0001" repartidor_id "REP-0001" estado "EN_CAMINO" ubicacion_actual "-12.1145,-77.0312" distrito "Miraflores" eta_minutos "8" ultima_actualizacion "2026-11-20T18:10:00Z"
+EXPIRE pedido:tracking:PED-0001 86400
+
+HSET pedido:tracking:PED-0002 pedido_id "PED-0002" cliente_id "CLI-0002" repartidor_id "REP-0002" estado "EN_CAMINO" ubicacion_actual "-12.0951,-77.0348" distrito "San Isidro" eta_minutos "12" ultima_actualizacion "2026-11-20T18:11:00Z"
+EXPIRE pedido:tracking:PED-0002 86400
+
+HSET pedido:tracking:PED-0003 pedido_id "PED-0003" cliente_id "CLI-0003" repartidor_id "REP-0003" estado "EN_CAMINO" ubicacion_actual "-12.0840,-77.0360" distrito "Lince" eta_minutos "6" ultima_actualizacion "2026-11-20T18:12:00Z"
+EXPIRE pedido:tracking:PED-0003 86400
+
+HSET pedido:tracking:PED-0004 pedido_id "PED-0004" cliente_id "CLI-0004" repartidor_id "REP-0004" estado "EN_CAMINO" ubicacion_actual "-12.1320,-76.9950" distrito "Surco" eta_minutos "15" ultima_actualizacion "2026-11-20T18:12:30Z"
+EXPIRE pedido:tracking:PED-0004 86400
+
+HSET pedido:tracking:PED-0005 pedido_id "PED-0005" cliente_id "CLI-0005" repartidor_id "REP-0005" estado "EN_CAMINO" ubicacion_actual "-12.1055,-76.9980" distrito "San Borja" eta_minutos "10" ultima_actualizacion "2026-11-20T18:13:00Z"
+EXPIRE pedido:tracking:PED-0005 86400
+
+HSET pedido:tracking:PED-0006 pedido_id "PED-0006" cliente_id "CLI-0006" repartidor_id "REP-0006" estado "EN_PREPARACION" ubicacion_actual "ALMACEN_CENTRAL_MAGDALENA" distrito "Magdalena" eta_minutos "25" ultima_actualizacion "2026-11-20T18:05:00Z"
+EXPIRE pedido:tracking:PED-0006 86400
+
+HSET pedido:tracking:PED-0007 pedido_id "PED-0007" cliente_id "CLI-0007" repartidor_id "REP-0007" estado "EN_PREPARACION" ubicacion_actual "ALMACEN_CENTRAL_JESUS_MARIA" distrito "Jesus Maria" eta_minutos "22" ultima_actualizacion "2026-11-20T18:06:00Z"
+EXPIRE pedido:tracking:PED-0007 86400
+
+HSET pedido:tracking:PED-0008 pedido_id "PED-0008" cliente_id "CLI-0008" repartidor_id "REP-0008" estado "EN_PREPARACION" ubicacion_actual "ALMACEN_CENTRAL_PUEBLO_LIBRE" distrito "Pueblo Libre" eta_minutos "28" ultima_actualizacion "2026-11-20T18:07:00Z"
+EXPIRE pedido:tracking:PED-0008 86400
+
+HSET pedido:tracking:PED-0009 pedido_id "PED-0009" cliente_id "CLI-0009" repartidor_id "REP-0009" estado "EN_PREPARACION" ubicacion_actual "ALMACEN_NORTE_LOS_OLIVOS" distrito "Los Olivos" eta_minutos "30" ultima_actualizacion "2026-11-20T18:08:00Z"
+EXPIRE pedido:tracking:PED-0009 86400
+
+HSET pedido:tracking:PED-0010 pedido_id "PED-0010" cliente_id "CLI-0010" repartidor_id "REP-0010" estado "EN_PREPARACION" ubicacion_actual "ALMACEN_OESTE_SAN_MIGUEL" distrito "San Miguel" eta_minutos "24" ultima_actualizacion "2026-11-20T18:09:00Z"
+EXPIRE pedido:tracking:PED-0010 86400
+
+HSET pedido:tracking:PED-0011 pedido_id "PED-0011" cliente_id "CLI-0011" repartidor_id "SIN_ASIGNAR" estado "PENDIENTE" ubicacion_actual "COLA_DESPACHO" distrito "Miraflores" eta_minutos "35" ultima_actualizacion "2026-11-20T18:14:00Z"
+EXPIRE pedido:tracking:PED-0011 86400
+
+HSET pedido:tracking:PED-0012 pedido_id "PED-0012" cliente_id "CLI-0012" repartidor_id "SIN_ASIGNAR" estado "PENDIENTE" ubicacion_actual "COLA_DESPACHO" distrito "San Isidro" eta_minutos "35" ultima_actualizacion "2026-11-20T18:14:20Z"
+EXPIRE pedido:tracking:PED-0012 86400
+
+HSET pedido:tracking:PED-0013 pedido_id "PED-0013" cliente_id "CLI-0013" repartidor_id "SIN_ASIGNAR" estado "PENDIENTE" ubicacion_actual "COLA_DESPACHO" distrito "Lince" eta_minutos "40" ultima_actualizacion "2026-11-20T18:14:40Z"
+EXPIRE pedido:tracking:PED-0013 86400
+
+HSET pedido:tracking:PED-0014 pedido_id "PED-0014" cliente_id "CLI-0014" repartidor_id "SIN_ASIGNAR" estado "PENDIENTE" ubicacion_actual "COLA_DESPACHO" distrito "Surco" eta_minutos "38" ultima_actualizacion "2026-11-20T18:15:00Z"
+EXPIRE pedido:tracking:PED-0014 86400
+
+HSET pedido:tracking:PED-0015 pedido_id "PED-0015" cliente_id "CLI-0015" repartidor_id "SIN_ASIGNAR" estado "PENDIENTE" ubicacion_actual "COLA_DESPACHO" distrito "San Borja" eta_minutos "35" ultima_actualizacion "2026-11-20T18:15:10Z"
+EXPIRE pedido:tracking:PED-0015 86400
+
+ECHO "--- 2. Cargando 10 Hashes de Informacion Critica de Clientes (TTL: 3600s / 1h) ---"
+HSET cliente:critico:CLI-0001 cliente_id "CLI-0001" nombre "Valeria Mendoza Rios" telefono "+5198001234" nivel_fidelidad "PLATA" direccion_principal "Av. Arequipa 125, Dpto 101 - Miraflores" pedido_activo "PED-0001"
+EXPIRE cliente:critico:CLI-0001 3600
+
+HSET cliente:critico:CLI-0002 cliente_id "CLI-0002" nombre "Sebastian Vargas Quispe" telefono "+5198002469" nivel_fidelidad "ORO" direccion_principal "Av. Javier Prado Este 150, Dpto 102 - San Isidro" pedido_activo "PED-0002"
+EXPIRE cliente:critico:CLI-0002 3600
+
+HSET cliente:critico:CLI-0003 cliente_id "CLI-0003" nombre "Camila Fernandez Rojas" telefono "+5198003703" nivel_fidelidad "PLATINO" direccion_principal "Av. Benavides 175, Dpto 103 - Lince" pedido_activo "PED-0003"
+EXPIRE cliente:critico:CLI-0003 3600
+
+HSET cliente:critico:CLI-0004 cliente_id "CLI-0004" nombre "Mateo Castillo Paredes" telefono "+5198004938" nivel_fidelidad "BRONCE" direccion_principal "Av. Brasil 200, Dpto 104 - Surco" pedido_activo "PED-0004"
+EXPIRE cliente:critico:CLI-0004 3600
+
+HSET cliente:critico:CLI-0005 cliente_id "CLI-0005" nombre "Lucia Salazar Huaman" telefono "+5198006172" nivel_fidelidad "PLATA" direccion_principal "Calle Las Begonias 225, Dpto 105 - San Borja" pedido_activo "PED-0005"
+EXPIRE cliente:critico:CLI-0005 3600
+
+HSET cliente:critico:CLI-0006 cliente_id "CLI-0006" nombre "Diego Morales Espinoza" telefono "+5198007407" nivel_fidelidad "ORO" direccion_principal "Av. Angamos Oeste 250, Dpto 106 - Magdalena" pedido_activo "PED-0006"
+EXPIRE cliente:critico:CLI-0006 3600
+
+HSET cliente:critico:CLI-0007 cliente_id "CLI-0007" nombre "Sofia Gutierrez Chavez" telefono "+5198008641" nivel_fidelidad "PLATINO" direccion_principal "Jr. Huiracocha 275, Dpto 107 - Jesus Maria" pedido_activo "PED-0007"
+EXPIRE cliente:critico:CLI-0007 3600
+
+HSET cliente:critico:CLI-0008 cliente_id "CLI-0008" nombre "Alejandro Torres Silva" telefono "+5198009876" nivel_fidelidad "BRONCE" direccion_principal "Av. La Marina 300, Dpto 108 - Pueblo Libre" pedido_activo "PED-0008"
+EXPIRE cliente:critico:CLI-0008 3600
+
+HSET cliente:critico:CLI-0009 cliente_id "CLI-0009" nombre "Valentina Romero Castro" telefono "+5198011110" nivel_fidelidad "PLATA" direccion_principal "Av. Salaverry 325, Dpto 109 - Los Olivos" pedido_activo "PED-0009"
+EXPIRE cliente:critico:CLI-0009 3600
+
+HSET cliente:critico:CLI-0010 cliente_id "CLI-0010" nombre "Gabriel Flores Mendoza" telefono "+5198012345" nivel_fidelidad "ORO" direccion_principal "Av. Primavera 350, Dpto 110 - San Miguel" pedido_activo "PED-0010"
+EXPIRE cliente:critico:CLI-0010 3600
+
+ECHO "--- 3. Cargando 5 Strings de Codigos PIN/OTP de Entrega (TTL: 1800s / 30m) ---"
+SET pedido:otp:PED-0001 "4829" EX 1800
+SET pedido:otp:PED-0002 "7391" EX 1800
+SET pedido:otp:PED-0003 "1564" EX 1800
+SET pedido:otp:PED-0004 "9042" EX 1800
+SET pedido:otp:PED-0005 "6218" EX 1800
+
+ECHO "=== TOTAL DE CLAVES CARGADAS EN REDIS (DBSIZE): ==="
+DBSIZE
