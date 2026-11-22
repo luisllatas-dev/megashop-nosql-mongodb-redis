@@ -15,6 +15,9 @@ print("=========================================================================
 
 // ============================================================================
 // CONSULTA 1: BÚSQUEDA POR CLIENTE (find + projection + sort)
+// Caso de negocio: Consultar el historial de pedidos del cliente "CLI-0001",
+// proyectando únicamente los campos relevantes para la vista "Mis Pedidos"
+// y ordenando del más reciente al más antiguo (usa idx_pedidos_cliente_fecha).
 // ============================================================================
 print("--- [CONSULTA 1] Búsqueda de pedidos del cliente CLI-0001 (find + projection + sort) ---");
 
@@ -38,6 +41,9 @@ printjson(consulta1);
 
 // ============================================================================
 // CONSULTA 2: RANGO DE FECHAS DE PEDIDOS CON MÚLTIPLES OPERADORES
+// ($gte, $lte, $in, $gt + sort + limit)
+// Caso de negocio: Obtener los pedidos realizados en Noviembre 2026 cuyo estado
+// esté activo o entregado ($in), con un monto total mayor a S/ 100.00 ($gt).
 // ============================================================================
 print("\n--- [CONSULTA 2] Pedidos en rango de fechas (Noviembre 2026) con filtros múltiples ---");
 
@@ -65,6 +71,9 @@ printjson(consulta2);
 
 // ============================================================================
 // CONSULTA 3: AGREGACIÓN (PIPELINE CON $match, $group, $project y $sort)
+// Caso de negocio: Reporte gerencial de ingresos totales, ticket promedio y
+// cantidad de pedidos agrupados por estado_actual y metodo_pago, más un
+// segundo pipeline con $unwind para el Top 5 productos más vendidos.
 // ============================================================================
 print("\n--- [CONSULTA 3A] Agregación: Resumen financiero por Estado de Pedido ---");
 
@@ -131,7 +140,11 @@ const consulta3B = db.pedidos.aggregate([
 printjson(consulta3B);
 
 // ============================================================================
-// CONSULTA 4: ACTUALIZACIÓN AVANZADA ($set + $push en array embebido)
+// CONSULTA 4: ACTUALIZACIÓN AVANZADA ($set + $push en array embebido + $inc)
+// Caso de negocio: El pedido "PED-0006" que estaba "EN_PREPARACION" pasa a
+// "EN_CAMINO". Se actualiza su estado_actual con $set y se agrega un nuevo
+// evento de auditoría al array embebido historial_estados con $push.
+// Adicionalmente, al repartidor asignado (REP-0006) se le actualiza su estado.
 // ============================================================================
 print("\n--- [CONSULTA 4] Actualización de estado y trazabilidad embebida del pedido PED-0006 ---");
 
@@ -153,6 +166,7 @@ const resultadoUpdatePedido = db.pedidos.updateOne(
 
 printjson(resultadoUpdatePedido);
 
+// Verificamos el documento actualizado
 print("Documento PED-0006 tras la actualización:");
 printjson(
     db.pedidos.findOne(
@@ -163,9 +177,13 @@ printjson(
 
 // ============================================================================
 // CONSULTA 5: ELIMINACIÓN CONTROLADA (deleteOne / deleteMany con criterios)
+// Caso de negocio: Insertamos un pedido temporal de prueba cancelado por error
+// de pasarela ("PED-9999") y luego lo eliminamos junto con la validación del
+// conteo antes y después para no alterar los 230 documentos base del dataset.
 // ============================================================================
 print("\n--- [CONSULTA 5] Eliminación controlada de registros (deleteOne / deleteMany) ---");
 
+// 5.1 Insertamos un documento temporal cancelado para evidenciar la eliminación en vivo
 db.pedidos.insertOne({
     pedido_id: "PED-9999",
     cliente_id: "CLI-0001",
@@ -195,6 +213,7 @@ db.pedidos.insertOne({
 });
 print("Pedido temporal PED-9999 insertado. Total pedidos antes de eliminar: " + db.pedidos.countDocuments());
 
+// 5.2 Ejecutamos la eliminación combinando múltiples filtros (pedido_id y estado_actual)
 const resultadoDelete = db.pedidos.deleteOne({
     pedido_id: "PED-9999",
     estado_actual: "CANCELADO"
@@ -206,6 +225,7 @@ print("Total pedidos después de eliminar PED-9999: " + db.pedidos.countDocument
 
 // ============================================================================
 // CONSULTA 6 (BONUS SOBRESALIENTE): INTEGRACIÓN DE LAS 5 COLECCIONES
+// Reporte de Reclamos Post-Venta cruzando resenas_incidencias, clientes y repartidores
 // ============================================================================
 print("\n--- [CONSULTA 6 - BONUS] Cruce de Reclamos con Clientes y Repartidores ($lookup) ---");
 
@@ -246,6 +266,8 @@ printjson(consultaReclamos);
 
 // ============================================================================
 // CONSULTA 7 (BONUS SOBRESALIENTE): DEMOSTRACIÓN DE USO DE ÍNDICES (.explain)
+// Demuestra que la Consulta 1 utiliza IXSCAN sobre 'idx_pedidos_cliente_fecha'
+// con 0 milisegundos de latencia y sin escaneo de colección (COLLSCAN).
 // ============================================================================
 print("\n--- [CONSULTA 7 - BONUS] Plan de Ejecución e Indexación (.explain('executionStats')) ---");
 
