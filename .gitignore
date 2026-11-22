@@ -1,0 +1,17 @@
+# ============================================================================
+# .gitignore - Proyecto NoSQL Megashop (MongoDB + Redis)
+# ============================================================================
+
+# Documentación interna, archivos PDF y empaquetados ZIP
+docs/
+*.pdf
+*.zip
+*.tar
+*.tar.gz
+
+# Archivos temporales del sistema operativo / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
